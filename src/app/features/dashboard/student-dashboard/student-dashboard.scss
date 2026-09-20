@@ -1,0 +1,39 @@
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.summary {
+  opacity: 0.7;
+  margin-top: 0;
+}
+
+.empty-state {
+  opacity: 0.7;
+  padding: 2rem 0;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.course-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.percentage {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.lessons-count {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-top: 0.5rem;
+}

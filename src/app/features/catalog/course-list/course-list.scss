@@ -1,0 +1,44 @@
+.catalog-page {
+  h1 {
+    margin-bottom: 1rem;
+  }
+}
+
+.search-field {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 1.5rem;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.empty-state {
+  opacity: 0.7;
+  padding: 2rem 0;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.course-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.course-card {
+  height: 100%;
+
+  p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

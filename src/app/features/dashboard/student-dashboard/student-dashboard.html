@@ -1,0 +1,34 @@
+@if (loading()) {
+  <div class="loading">
+    <mat-spinner diameter="40" />
+  </div>
+} @else if (data(); as d) {
+  <div class="dashboard-page">
+    <h1>O Meu Progresso</h1>
+    <p class="summary">Inscrito em {{ d.enrolledCourses }} curso(s)</p>
+
+    @if (d.courses.length === 0) {
+      <p class="empty-state">
+        Ainda não estás inscrito em nenhum curso. <a routerLink="/courses">Explorar catálogo</a>
+      </p>
+    } @else {
+      <div class="course-grid">
+        @for (entry of d.courses; track entry.course._id) {
+          <a class="course-link" [routerLink]="['/courses', entry.course._id]">
+            <mat-card class="course-card">
+              <mat-card-header>
+                <mat-card-title>{{ entry.course.title }}</mat-card-title>
+                <mat-card-subtitle>{{ entry.course.category }}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <span class="percentage">{{ entry.percentage }}%</span>
+                <mat-progress-bar mode="determinate" [value]="entry.percentage" />
+                <p class="lessons-count">{{ entry.completedLessons }} aula(s) concluída(s)</p>
+              </mat-card-content>
+            </mat-card>
+          </a>
+        }
+      </div>
+    }
+  </div>
+}

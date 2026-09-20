@@ -1,0 +1,39 @@
+@if (loading()) {
+  <div class="loading">
+    <mat-spinner diameter="40" />
+  </div>
+} @else if (currentLesson(); as lesson) {
+  <div class="lesson-page">
+    <a mat-button [routerLink]="['/courses', id()]">
+      <mat-icon>arrow_back</mat-icon>
+      Voltar ao curso
+    </a>
+
+    <h1>{{ lesson.title }}</h1>
+
+    @if (lesson.videoUrl) {
+      <video class="lesson-video" [src]="lesson.videoUrl" controls></video>
+    }
+
+    @if (lesson.pdfUrl) {
+      <a mat-stroked-button [href]="lesson.pdfUrl" target="_blank" rel="noopener" class="pdf-link">
+        <mat-icon>picture_as_pdf</mat-icon>
+        Descarregar PDF
+      </a>
+    }
+
+    <div class="lesson-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="isCompleted() || completing()"
+        (click)="markAsCompleted()"
+      >
+        <mat-icon>{{ isCompleted() ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+        {{ isCompleted() ? 'Aula concluída' : 'Marcar como concluída' }}
+      </button>
+    </div>
+  </div>
+} @else {
+  <p class="empty-state">Aula não encontrada.</p>
+}

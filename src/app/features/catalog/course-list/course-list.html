@@ -1,0 +1,36 @@
+<div class="catalog-page">
+  <h1>Catálogo de Cursos</h1>
+
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Pesquisar por nome</mat-label>
+    <input matInput [formControl]="search" placeholder="Ex: Angular" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  @if (loading()) {
+    <div class="loading">
+      <mat-spinner diameter="40" />
+    </div>
+  } @else if (courses().length === 0) {
+    <p class="empty-state">Nenhum curso encontrado.</p>
+  } @else {
+    <div class="course-grid">
+      @for (course of courses(); track course._id) {
+        <a class="course-link" [routerLink]="['/courses', course._id]">
+          <mat-card class="course-card">
+            @if (course.thumbnail) {
+              <img mat-card-image [src]="course.thumbnail" [alt]="course.title" />
+            }
+            <mat-card-header>
+              <mat-card-title>{{ course.title }}</mat-card-title>
+              <mat-card-subtitle>{{ course.category }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p>{{ course.description }}</p>
+            </mat-card-content>
+          </mat-card>
+        </a>
+      }
+    </div>
+  }
+</div>

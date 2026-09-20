@@ -1,0 +1,51 @@
+@if (loading()) {
+  <div class="loading">
+    <mat-spinner diameter="40" />
+  </div>
+} @else if (course(); as c) {
+  <div class="course-detail-page">
+    <header class="course-header">
+      <h1>{{ c.title }}</h1>
+      <p class="category">{{ c.category }}</p>
+      <p class="description">{{ c.description }}</p>
+
+      @if (progress(); as p) {
+        <div class="progress-block">
+          <span>Progresso: {{ p.percentage }}%</span>
+          <mat-progress-bar mode="determinate" [value]="p.percentage" />
+        </div>
+      }
+    </header>
+
+    @if (c.modules.length === 0) {
+      <p class="empty-state">Este curso ainda não tem módulos.</p>
+    } @else {
+      <mat-accordion multi>
+        @for (module of c.modules; track module._id) {
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ module.title }}</mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <mat-nav-list>
+              @for (lesson of module.lessons; track lesson._id) {
+                <a
+                  mat-list-item
+                  [routerLink]="['/courses', c._id, 'lessons', lesson._id]"
+                  [queryParams]="{ module: module._id }"
+                >
+                  <mat-icon matListItemIcon>
+                    {{ isLessonCompleted(lesson._id) ? 'check_circle' : 'play_circle' }}
+                  </mat-icon>
+                  <span matListItemTitle>{{ lesson.title }}</span>
+                </a>
+              }
+            </mat-nav-list>
+          </mat-expansion-panel>
+        }
+      </mat-accordion>
+    }
+  </div>
+} @else {
+  <p class="empty-state">Curso não encontrado.</p>
+}

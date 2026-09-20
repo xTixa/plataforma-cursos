@@ -1,0 +1,40 @@
+@if (loading()) {
+  <div class="loading">
+    <mat-spinner diameter="40" />
+  </div>
+} @else if (data(); as d) {
+  <div class="dashboard-page">
+    <div class="header-row">
+      <h1>Dashboard de Administrador</h1>
+      <a mat-raised-button color="primary" routerLink="/admin/courses/new">
+        <mat-icon>add</mat-icon>
+        Novo Curso
+      </a>
+    </div>
+
+    <div class="stats-grid">
+      <mat-card class="stat-card">
+        <mat-icon>menu_book</mat-icon>
+        <span class="value">{{ d.totalCourses }}</span>
+        <span class="label">Cursos</span>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-icon>group</mat-icon>
+        <span class="value">{{ d.totalStudents }}</span>
+        <span class="label">Alunos</span>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-icon>fact_check</mat-icon>
+        <span class="value">{{ d.totalEnrollments }}</span>
+        <span class="label">Inscrições</span>
+      </mat-card>
+    </div>
+
+    <a mat-stroked-button routerLink="/courses" class="manage-link">
+      <mat-icon>list</mat-icon>
+      Ver e gerir cursos no catálogo
+    </a>
+  </div>
+}

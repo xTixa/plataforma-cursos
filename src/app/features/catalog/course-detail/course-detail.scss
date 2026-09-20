@@ -1,0 +1,39 @@
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.course-header {
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin-bottom: 0.25rem;
+  }
+
+  .category {
+    opacity: 0.7;
+    margin: 0 0 0.75rem;
+  }
+
+  .description {
+    max-width: 700px;
+  }
+}
+
+.progress-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 400px;
+  margin-top: 1rem;
+
+  span {
+    font-size: 0.875rem;
+  }
+}
+
+.empty-state {
+  opacity: 0.7;
+  padding: 2rem 0;
+}
