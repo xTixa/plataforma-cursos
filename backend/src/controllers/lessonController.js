@@ -68,4 +68,34 @@ async function deleteLesson(req, res, next) {
   }
 }
 
-module.exports = { addLesson, updateLesson, deleteLesson };
+async function reorderLessons(req, res, next) {
+  try {
+    const { lessonIds } = req.body;
+
+    const course = await Course.findById(req.params.courseId);
+    if (!course) throw new ApiError(404, 'Curso não encontrado');
+
+    const module = findModule(course, req.params.moduleId);
+
+    if (!Array.isArray(lessonIds) || lessonIds.length !== module.lessons.length) {
+      throw new ApiError(400, 'A lista de aulas é inválida');
+    }
+
+    const validIds = new Set(module.lessons.map((l) => l._id.toString()));
+    if (!lessonIds.every((id) => validIds.has(id))) {
+      throw new ApiError(400, 'A lista de aulas contém IDs desconhecidos');
+    }
+
+    lessonIds.forEach((id, index) => {
+      module.lessons.id(id).order = index;
+    });
+    module.lessons.sort((a, b) => a.order - b.order);
+
+    await course.save();
+    res.json(module.lessons);
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { addLesson, updateLesson, deleteLesson, reorderLessons };

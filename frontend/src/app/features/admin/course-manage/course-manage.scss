@@ -17,32 +17,15 @@
   }
 }
 
+.header-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 .subtitle {
   opacity: 0.7;
   margin: 0;
-}
-
-.new-module-card {
-  margin-bottom: 1.5rem;
-}
-
-.inline-form {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-
-  mat-form-field {
-    flex: 1 1 260px;
-  }
-
-  button {
-    margin-top: 0.5rem;
-  }
-}
-
-.order-field {
-  max-width: 120px;
 }
 
 .empty-state {
@@ -50,60 +33,107 @@
   padding: 2rem 0;
 }
 
-.modules-accordion {
-  display: block;
+.empty-state-small {
+  opacity: 0.6;
+  font-size: 0.875rem;
+  padding: 0.5rem 0;
 }
 
-.lesson-list {
-  margin-bottom: 1rem;
+.modules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.module-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.module-header {
+  display: flex;
+  align-items: stretch;
+}
+
+.module-panel {
+  flex: 1;
+  box-shadow: none !important;
+}
+
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  cursor: grab;
+  color: rgba(0, 0, 0, 0.4);
+  touch-action: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.module-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.5rem;
+
+  .spacer {
+    flex: 1;
+  }
+}
+
+.lessons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 .lesson-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--mat-sys-outline-variant, rgba(0, 0, 0, 0.08));
+  gap: 0.5rem;
+  padding: 0.5rem 0.5rem;
+  border: 1px solid var(--mat-sys-outline-variant, rgba(0, 0, 0, 0.1));
+  border-radius: 6px;
+  background: var(--mat-sys-surface, #fff);
+
+  .lesson-type-icon {
+    opacity: 0.6;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
 
   .lesson-title {
     flex: 1;
   }
-}
 
-.lesson-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem 0;
-
-  h3 {
-    margin: 0 0 0.25rem;
-    font-size: 1rem;
-    opacity: 0.8;
+  .lesson-duration {
+    font-size: 0.8rem;
+    opacity: 0.6;
   }
 }
 
-.lesson-form-row {
-  display: flex;
-  gap: 0.75rem;
+// Estados de drag do CDK
+.cdk-drag-preview {
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
 }
 
-.file-fields {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  margin-bottom: 0.5rem;
+.cdk-drag-placeholder {
+  opacity: 0.3;
 }
 
-.file-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.875rem;
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.lesson-form-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.modules-list.cdk-drop-list-dragging .module-card:not(.cdk-drag-placeholder),
+.lessons-list.cdk-drop-list-dragging .lesson-row:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }

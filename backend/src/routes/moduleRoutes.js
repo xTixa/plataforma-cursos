@@ -1,6 +1,11 @@
 const express = require('express');
 const { body } = require('express-validator');
-const { addModule, updateModule, deleteModule } = require('../controllers/moduleController');
+const {
+  addModule,
+  updateModule,
+  deleteModule,
+  reorderModules,
+} = require('../controllers/moduleController');
 const { protect, authorize } = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
 const lessonRoutes = require('./lessonRoutes');
@@ -13,6 +18,7 @@ const moduleValidation = [
 ];
 
 router.post('/', protect, authorize('admin'), moduleValidation, validate, addModule);
+router.patch('/reorder', protect, authorize('admin'), reorderModules);
 router.put('/:moduleId', protect, authorize('admin'), updateModule);
 router.delete('/:moduleId', protect, authorize('admin'), deleteModule);
 

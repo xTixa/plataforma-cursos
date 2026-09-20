@@ -50,25 +50,64 @@ export class CourseService {
     return this.http.post<CourseModule>(`${this.apiUrl}/${courseId}/modules`, payload);
   }
 
+  updateModule(
+    courseId: string,
+    moduleId: string,
+    payload: { title: string }
+  ): Observable<CourseModule> {
+    return this.http.put<CourseModule>(`${this.apiUrl}/${courseId}/modules/${moduleId}`, payload);
+  }
+
   deleteModule(courseId: string, moduleId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${courseId}/modules/${moduleId}`);
   }
 
-  addLesson(courseId: string, moduleId: string, payload: LessonPayload): Observable<Lesson> {
-    const formData = new FormData();
-    formData.append('title', payload.title);
-    formData.append('order', String(payload.order));
-    if (payload.duration !== undefined) formData.append('duration', String(payload.duration));
-    if (payload.video) formData.append('video', payload.video);
-    if (payload.pdf) formData.append('pdf', payload.pdf);
+  reorderModules(courseId: string, moduleIds: string[]): Observable<CourseModule[]> {
+    return this.http.patch<CourseModule[]>(`${this.apiUrl}/${courseId}/modules/reorder`, {
+      moduleIds,
+    });
+  }
 
-    return this.http.post<Lesson>(`${this.apiUrl}/${courseId}/modules/${moduleId}/lessons`, formData);
+  addLesson(courseId: string, moduleId: string, payload: LessonPayload): Observable<Lesson> {
+    return this.http.post<Lesson>(
+      `${this.apiUrl}/${courseId}/modules/${moduleId}/lessons`,
+      this.lessonToFormData(payload)
+    );
+  }
+
+  updateLesson(
+    courseId: string,
+    moduleId: string,
+    lessonId: string,
+    payload: LessonPayload
+  ): Observable<Lesson> {
+    return this.http.put<Lesson>(
+      `${this.apiUrl}/${courseId}/modules/${moduleId}/lessons/${lessonId}`,
+      this.lessonToFormData(payload)
+    );
   }
 
   deleteLesson(courseId: string, moduleId: string, lessonId: string): Observable<void> {
     return this.http.delete<void>(
       `${this.apiUrl}/${courseId}/modules/${moduleId}/lessons/${lessonId}`
     );
+  }
+
+  reorderLessons(courseId: string, moduleId: string, lessonIds: string[]): Observable<Lesson[]> {
+    return this.http.patch<Lesson[]>(
+      `${this.apiUrl}/${courseId}/modules/${moduleId}/lessons/reorder`,
+      { lessonIds }
+    );
+  }
+
+  private lessonToFormData(payload: LessonPayload): FormData {
+    const formData = new FormData();
+    formData.append('title', payload.title);
+    formData.append('order', String(payload.order));
+    if (payload.duration !== undefined) formData.append('duration', String(payload.duration));
+    if (payload.video) formData.append('video', payload.video);
+    if (payload.pdf) formData.append('pdf', payload.pdf);
+    return formData;
   }
 
   private toFormData(payload: CoursePayload): FormData {

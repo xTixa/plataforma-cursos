@@ -1,6 +1,11 @@
 const express = require('express');
 const { body } = require('express-validator');
-const { addLesson, updateLesson, deleteLesson } = require('../controllers/lessonController');
+const {
+  addLesson,
+  updateLesson,
+  deleteLesson,
+  reorderLessons,
+} = require('../controllers/lessonController');
 const { protect, authorize } = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
 const { upload, enforceFieldSizeLimits } = require('../middlewares/upload');
@@ -27,6 +32,8 @@ router.post(
   validate,
   addLesson
 );
+
+router.patch('/reorder', protect, authorize('admin'), reorderLessons);
 
 router.put(
   '/:lessonId',

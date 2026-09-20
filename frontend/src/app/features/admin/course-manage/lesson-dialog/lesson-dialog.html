@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Editar Aula' : 'Nova Aula' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Título da aula</mat-label>
+      <input matInput formControlName="title" cdkFocusInitial />
+      @if (form.controls.title.hasError('required') && form.controls.title.touched) {
+        <mat-error>O título é obrigatório</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Duração (minutos)</mat-label>
+      <input matInput type="number" formControlName="duration" />
+    </mat-form-field>
+
+    <div class="file-field">
+      <label for="video">Vídeo (MP4, até 500MB)</label>
+      @if (isEditMode && data.lesson?.videoUrl && !selectedVideo()) {
+        <span class="current-file">
+          <mat-icon inline>ondemand_video</mat-icon>
+          Já existe um vídeo — escolhe um novo ficheiro para substituir
+        </span>
+      }
+      <input id="video" type="file" accept="video/mp4" (change)="onVideoSelected($event)" />
+      @if (selectedVideo()) {
+        <span class="selected-file">{{ selectedVideo()!.name }}</span>
+      }
+    </div>
+
+    <div class="file-field">
+      <label for="pdf">PDF (até 20MB)</label>
+      @if (isEditMode && data.lesson?.pdfUrl && !selectedPdf()) {
+        <span class="current-file">
+          <mat-icon inline>picture_as_pdf</mat-icon>
+          Já existe um PDF — escolhe um novo ficheiro para substituir
+        </span>
+      }
+      <input id="pdf" type="file" accept="application/pdf" (change)="onPdfSelected($event)" />
+      @if (selectedPdf()) {
+        <span class="selected-file">{{ selectedPdf()!.name }}</span>
+      }
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" type="submit">Guardar</button>
+  </mat-dialog-actions>
+</form>

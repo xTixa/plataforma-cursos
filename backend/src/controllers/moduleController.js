@@ -54,4 +54,32 @@ async function deleteModule(req, res, next) {
   }
 }
 
-module.exports = { addModule, updateModule, deleteModule };
+async function reorderModules(req, res, next) {
+  try {
+    const { moduleIds } = req.body;
+
+    const course = await Course.findById(req.params.courseId);
+    if (!course) throw new ApiError(404, 'Curso não encontrado');
+
+    if (!Array.isArray(moduleIds) || moduleIds.length !== course.modules.length) {
+      throw new ApiError(400, 'A lista de módulos é inválida');
+    }
+
+    const validIds = new Set(course.modules.map((m) => m._id.toString()));
+    if (!moduleIds.every((id) => validIds.has(id))) {
+      throw new ApiError(400, 'A lista de módulos contém IDs desconhecidos');
+    }
+
+    moduleIds.forEach((id, index) => {
+      course.modules.id(id).order = index;
+    });
+    course.modules.sort((a, b) => a.order - b.order);
+
+    await course.save();
+    res.json(course.modules);
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { addModule, updateModule, deleteModule, reorderModules };

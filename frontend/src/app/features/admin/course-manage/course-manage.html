@@ -7,160 +7,95 @@
     <div class="header-row">
       <div>
         <h1>Gerir Curso: {{ c.title }}</h1>
-        <p class="subtitle">Adiciona módulos e aulas a este curso.</p>
+        <p class="subtitle">Arrasta para reordenar módulos e aulas.</p>
       </div>
-      <a mat-stroked-button [routerLink]="['/courses', c._id]">
-        <mat-icon>visibility</mat-icon>
-        Ver como aluno
-      </a>
+      <div class="header-actions">
+        <a mat-stroked-button [routerLink]="['/courses', c._id]">
+          <mat-icon>visibility</mat-icon>
+          Ver como aluno
+        </a>
+        <button mat-raised-button color="primary" (click)="openModuleDialog(null)">
+          <mat-icon>add</mat-icon>
+          Novo Módulo
+        </button>
+      </div>
     </div>
-
-    <mat-card class="new-module-card">
-      <mat-card-header>
-        <mat-card-title>Novo Módulo</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <form [formGroup]="moduleForm" (ngSubmit)="addModule()" class="inline-form">
-          <mat-form-field appearance="outline">
-            <mat-label>Título do módulo</mat-label>
-            <input matInput formControlName="title" />
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="order-field">
-            <mat-label>Ordem</mat-label>
-            <input matInput type="number" formControlName="order" />
-          </mat-form-field>
-
-          <button mat-raised-button color="primary" type="submit" [disabled]="savingModule()">
-            @if (savingModule()) {
-              <mat-spinner diameter="20" />
-            } @else {
-              <ng-container>
-                <mat-icon>add</mat-icon>
-                Adicionar
-              </ng-container>
-            }
-          </button>
-        </form>
-      </mat-card-content>
-    </mat-card>
 
     @if (c.modules.length === 0) {
       <p class="empty-state">Ainda não existem módulos. Cria o primeiro acima.</p>
     } @else {
-      <mat-accordion multi class="modules-accordion">
+      <div cdkDropList class="modules-list" (cdkDropListDropped)="dropModule($event)">
         @for (module of c.modules; track module._id) {
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>{{ module.title }}</mat-panel-title>
-              <mat-panel-description>{{ module.lessons.length }} aula(s)</mat-panel-description>
-            </mat-expansion-panel-header>
+          <mat-card class="module-card" cdkDrag>
+            <div class="module-header">
+              <span class="drag-handle" cdkDragHandle>
+                <mat-icon>drag_indicator</mat-icon>
+              </span>
 
-            @if (module.lessons.length > 0) {
-              <mat-nav-list class="lesson-list">
-                @for (lesson of module.lessons; track lesson._id) {
-                  <div class="lesson-row">
-                    <mat-icon>{{ lesson.videoUrl ? 'ondemand_video' : 'article' }}</mat-icon>
-                    <span class="lesson-title">{{ lesson.title }}</span>
-                    <button
-                      mat-icon-button
-                      color="warn"
-                      type="button"
-                      (click)="deleteLesson(module._id, lesson._id)"
-                      aria-label="Eliminar aula"
-                    >
-                      <mat-icon>delete</mat-icon>
-                    </button>
+              <mat-expansion-panel class="module-panel">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>{{ module.title }}</mat-panel-title>
+                  <mat-panel-description>{{ module.lessons.length }} aula(s)</mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="module-actions">
+                  <button mat-button (click)="openModuleDialog(module)">
+                    <mat-icon>edit</mat-icon>
+                    Editar módulo
+                  </button>
+                  <button mat-button color="warn" (click)="deleteModule(module)">
+                    <mat-icon>delete</mat-icon>
+                    Eliminar módulo
+                  </button>
+                  <span class="spacer"></span>
+                  <button mat-raised-button color="primary" (click)="openLessonDialog(module, null)">
+                    <mat-icon>add</mat-icon>
+                    Nova aula
+                  </button>
+                </div>
+
+                @if (module.lessons.length === 0) {
+                  <p class="empty-state-small">Sem aulas neste módulo.</p>
+                } @else {
+                  <div
+                    cdkDropList
+                    class="lessons-list"
+                    (cdkDropListDropped)="dropLesson(module, $event)"
+                  >
+                    @for (lesson of module.lessons; track lesson._id) {
+                      <div class="lesson-row" cdkDrag>
+                        <span class="drag-handle" cdkDragHandle>
+                          <mat-icon>drag_indicator</mat-icon>
+                        </span>
+                        <mat-icon class="lesson-type-icon">
+                          {{ lesson.videoUrl ? 'ondemand_video' : 'article' }}
+                        </mat-icon>
+                        <span class="lesson-title">{{ lesson.title }}</span>
+                        <span class="lesson-duration">{{ lesson.duration }} min</span>
+                        <button
+                          mat-icon-button
+                          (click)="openLessonDialog(module, lesson)"
+                          aria-label="Editar aula"
+                        >
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                        <button
+                          mat-icon-button
+                          color="warn"
+                          (click)="deleteLesson(module, lesson)"
+                          aria-label="Eliminar aula"
+                        >
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    }
                   </div>
                 }
-              </mat-nav-list>
-            }
-
-            <form
-              [formGroup]="getLessonForm(module._id)"
-              (ngSubmit)="addLesson(module._id)"
-              class="lesson-form"
-            >
-              <h3>Nova aula</h3>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Título da aula</mat-label>
-                <input matInput [formControl]="getLessonForm(module._id).controls.title" />
-              </mat-form-field>
-
-              <div class="lesson-form-row">
-                <mat-form-field appearance="outline" class="order-field">
-                  <mat-label>Ordem</mat-label>
-                  <input
-                    matInput
-                    type="number"
-                    [formControl]="getLessonForm(module._id).controls.order"
-                  />
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="order-field">
-                  <mat-label>Duração (min)</mat-label>
-                  <input
-                    matInput
-                    type="number"
-                    [formControl]="getLessonForm(module._id).controls.duration"
-                  />
-                </mat-form-field>
-              </div>
-
-              <div class="file-fields">
-                <div class="file-field">
-                  <label [for]="'video-' + module._id">Vídeo (MP4, até 500MB)</label>
-                  <input
-                    [id]="'video-' + module._id"
-                    type="file"
-                    accept="video/mp4"
-                    (change)="onVideoSelected(module._id, $event)"
-                  />
-                </div>
-
-                <div class="file-field">
-                  <label [for]="'pdf-' + module._id">PDF (até 20MB)</label>
-                  <input
-                    [id]="'pdf-' + module._id"
-                    type="file"
-                    accept="application/pdf"
-                    (change)="onPdfSelected(module._id, $event)"
-                  />
-                </div>
-              </div>
-
-              <div class="lesson-form-actions">
-                <button
-                  mat-raised-button
-                  color="primary"
-                  type="submit"
-                  [disabled]="savingLessonFor() === module._id"
-                >
-                  @if (savingLessonFor() === module._id) {
-                    <mat-spinner diameter="20" />
-                  } @else {
-                    <ng-container>
-                      <mat-icon>add</mat-icon>
-                      Adicionar aula
-                    </ng-container>
-                  }
-                </button>
-
-                <button
-                  mat-button
-                  color="warn"
-                  type="button"
-                  (click)="deleteModule(module._id)"
-                >
-                  <mat-icon>delete</mat-icon>
-                  Eliminar módulo
-                </button>
-              </div>
-            </form>
-          </mat-expansion-panel>
+              </mat-expansion-panel>
+            </div>
+          </mat-card>
         }
-      </mat-accordion>
+      </div>
     }
   </div>
 }

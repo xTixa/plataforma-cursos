@@ -1,0 +1,35 @@
+.full-width {
+  width: 100%;
+  min-width: 360px;
+}
+
+.file-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+
+  label {
+    font-weight: 500;
+  }
+}
+
+.current-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  opacity: 0.7;
+  font-size: 0.8rem;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.selected-file {
+  font-size: 0.8rem;
+  color: var(--mat-sys-primary, #1976d2);
+}
