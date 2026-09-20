@@ -64,6 +64,12 @@ export const routes: Routes = [
           import('./features/admin/course-form/course-form').then((m) => m.CourseForm),
       },
       {
+        path: 'admin/courses/:id/manage',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/admin/course-manage/course-manage').then((m) => m.CourseManage),
+      },
+      {
         path: '**',
         loadComponent: () =>
           import('./shared/components/not-found/not-found').then((m) => m.NotFound),

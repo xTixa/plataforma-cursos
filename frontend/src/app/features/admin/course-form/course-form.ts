@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -16,6 +17,7 @@ import { CourseService } from '../../../core/services/course.service';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatButtonModule,
     MatProgressSpinnerModule,
   ],
@@ -34,6 +36,7 @@ export class CourseForm implements OnInit {
   readonly saving = signal(false);
   readonly selectedFile = signal<File | null>(null);
   readonly isEditMode = signal(false);
+  readonly categories = signal<string[]>([]);
 
   readonly form = this.fb.nonNullable.group({
     title: ['', [Validators.required]],
@@ -42,6 +45,10 @@ export class CourseForm implements OnInit {
   });
 
   ngOnInit(): void {
+    this.courseService.getCategories().subscribe({
+      next: (categories) => this.categories.set(categories),
+    });
+
     const courseId = this.id();
     if (courseId) {
       this.isEditMode.set(true);
@@ -83,7 +90,7 @@ export class CourseForm implements OnInit {
       next: (course) => {
         this.saving.set(false);
         this.snackBar.open('Curso guardado com sucesso', 'Fechar', { duration: 3000 });
-        this.router.navigate(['/courses', course._id]);
+        this.router.navigate(['/admin/courses', course._id, 'manage']);
       },
       error: (err) => {
         this.saving.set(false);

@@ -15,6 +15,19 @@
           <mat-progress-bar mode="determinate" [value]="p.percentage" />
         </div>
       }
+
+      @if (auth.isAdmin()) {
+        <div class="admin-actions">
+          <a mat-stroked-button [routerLink]="['/admin/courses', c._id, 'manage']">
+            <mat-icon>settings</mat-icon>
+            Gerir módulos e aulas
+          </a>
+          <a mat-stroked-button [routerLink]="['/admin/courses', c._id, 'edit']">
+            <mat-icon>edit</mat-icon>
+            Editar curso
+          </a>
+        </div>
+      }
     </header>
 
     @if (c.modules.length === 0) {

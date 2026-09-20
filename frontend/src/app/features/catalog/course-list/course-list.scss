@@ -4,10 +4,21 @@
   }
 }
 
+.filters-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
 .search-field {
   width: 100%;
   max-width: 400px;
-  margin-bottom: 1.5rem;
+}
+
+.category-field {
+  width: 100%;
+  max-width: 260px;
 }
 
 .loading {

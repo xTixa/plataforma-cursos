@@ -10,6 +10,7 @@ const {
 const { protect, authorize } = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
 const { upload } = require('../middlewares/upload');
+const { COURSE_CATEGORIES } = require('../constants/categories');
 const moduleRoutes = require('./moduleRoutes');
 const progressRoutes = require('./progressRoutes');
 
@@ -18,9 +19,15 @@ const router = express.Router();
 const courseValidation = [
   body('title').trim().notEmpty().withMessage('O título é obrigatório'),
   body('description').trim().notEmpty().withMessage('A descrição é obrigatória'),
-  body('category').trim().notEmpty().withMessage('A categoria é obrigatória'),
+  body('category')
+    .trim()
+    .notEmpty()
+    .withMessage('A categoria é obrigatória')
+    .isIn(COURSE_CATEGORIES)
+    .withMessage('Categoria inválida'),
 ];
 
+router.get('/categories', (req, res) => res.json(COURSE_CATEGORIES));
 router.get('/', listCourses);
 router.get('/:id', getCourse);
 

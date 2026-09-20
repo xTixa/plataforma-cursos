@@ -21,7 +21,11 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Categoria</mat-label>
-            <input matInput formControlName="category" />
+            <mat-select formControlName="category">
+              @for (cat of categories(); track cat) {
+                <mat-option [value]="cat">{{ cat }}</mat-option>
+              }
+            </mat-select>
             @if (form.controls.category.hasError('required') && form.controls.category.touched) {
               <mat-error>A categoria é obrigatória</mat-error>
             }

@@ -1,11 +1,23 @@
 <div class="catalog-page">
   <h1>Catálogo de Cursos</h1>
 
-  <mat-form-field appearance="outline" class="search-field">
-    <mat-label>Pesquisar por nome</mat-label>
-    <input matInput [formControl]="search" placeholder="Ex: Angular" />
-    <mat-icon matSuffix>search</mat-icon>
-  </mat-form-field>
+  <div class="filters-row">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Pesquisar por nome</mat-label>
+      <input matInput [formControl]="search" placeholder="Ex: Angular" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="category-field">
+      <mat-label>Categoria</mat-label>
+      <mat-select [formControl]="categoryFilter">
+        <mat-option [value]="null">Todas as categorias</mat-option>
+        @for (cat of categories(); track cat) {
+          <mat-option [value]="cat">{{ cat }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
 
   @if (loading()) {
     <div class="loading">

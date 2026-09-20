@@ -1,8 +1,16 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Course, CoursePayload, CourseSummary, LessonPayload, ModulePayload } from '../models/course.model';
+import {
+  Course,
+  CourseModule,
+  CoursePayload,
+  CourseSummary,
+  Lesson,
+  LessonPayload,
+  ModulePayload,
+} from '../models/course.model';
 
 @Injectable({ providedIn: 'root' })
 export class CourseService {
@@ -11,7 +19,15 @@ export class CourseService {
   constructor(private http: HttpClient) {}
 
   list(params?: { search?: string; category?: string }): Observable<CourseSummary[]> {
-    return this.http.get<CourseSummary[]>(this.apiUrl, { params: { ...params } });
+    let httpParams = new HttpParams();
+    if (params?.search) httpParams = httpParams.set('search', params.search);
+    if (params?.category) httpParams = httpParams.set('category', params.category);
+
+    return this.http.get<CourseSummary[]>(this.apiUrl, { params: httpParams });
+  }
+
+  getCategories(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/categories`);
   }
 
   getById(id: string): Observable<Course> {
@@ -30,15 +46,15 @@ export class CourseService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  addModule(courseId: string, payload: ModulePayload): Observable<unknown> {
-    return this.http.post(`${this.apiUrl}/${courseId}/modules`, payload);
+  addModule(courseId: string, payload: ModulePayload): Observable<CourseModule> {
+    return this.http.post<CourseModule>(`${this.apiUrl}/${courseId}/modules`, payload);
   }
 
   deleteModule(courseId: string, moduleId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${courseId}/modules/${moduleId}`);
   }
 
-  addLesson(courseId: string, moduleId: string, payload: LessonPayload): Observable<unknown> {
+  addLesson(courseId: string, moduleId: string, payload: LessonPayload): Observable<Lesson> {
     const formData = new FormData();
     formData.append('title', payload.title);
     formData.append('order', String(payload.order));
@@ -46,7 +62,7 @@ export class CourseService {
     if (payload.video) formData.append('video', payload.video);
     if (payload.pdf) formData.append('pdf', payload.pdf);
 
-    return this.http.post(`${this.apiUrl}/${courseId}/modules/${moduleId}/lessons`, formData);
+    return this.http.post<Lesson>(`${this.apiUrl}/${courseId}/modules/${moduleId}/lessons`, formData);
   }
 
   deleteLesson(courseId: string, moduleId: string, lessonId: string): Observable<void> {

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { COURSE_CATEGORIES } = require('../constants/categories');
 
 const lessonSchema = new mongoose.Schema(
   {
@@ -35,6 +36,10 @@ const courseSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A categoria é obrigatória'],
       trim: true,
+      enum: {
+        values: COURSE_CATEGORIES,
+        message: 'Categoria inválida',
+      },
     },
     thumbnail: {
       type: String,
