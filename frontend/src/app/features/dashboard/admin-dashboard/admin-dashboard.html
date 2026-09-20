@@ -30,11 +30,41 @@
         <span class="value">{{ d.totalEnrollments }}</span>
         <span class="label">Inscrições</span>
       </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-icon>trending_up</mat-icon>
+        <span class="value">{{ d.avgCompletionRate }}%</span>
+        <span class="label">Progresso Médio</span>
+      </mat-card>
+
+      <mat-card class="stat-card" [class.stat-card--warning]="d.coursesWithoutModules > 0">
+        <mat-icon>warning</mat-icon>
+        <span class="value">{{ d.coursesWithoutModules }}</span>
+        <span class="label">Cursos sem conteúdo</span>
+      </mat-card>
+
+      @if (d.mostPopularCourse) {
+        <mat-card class="stat-card stat-card--wide">
+          <mat-icon>star</mat-icon>
+          <span class="value value--small">{{ d.mostPopularCourse.title }}</span>
+          <span class="label">Curso mais popular ({{ d.mostPopularCourse.enrollments }} inscrições)</span>
+        </mat-card>
+      }
     </div>
 
-    <a mat-stroked-button routerLink="/courses" class="manage-link">
-      <mat-icon>list</mat-icon>
-      Ver e gerir cursos no catálogo
-    </a>
+    <div class="quick-links">
+      <a mat-stroked-button routerLink="/admin/courses">
+        <mat-icon>list</mat-icon>
+        Gerir cursos
+      </a>
+      <a mat-stroked-button routerLink="/admin/students">
+        <mat-icon>group</mat-icon>
+        Gerir alunos
+      </a>
+      <a mat-stroked-button routerLink="/courses">
+        <mat-icon>visibility</mat-icon>
+        Ver catálogo público
+      </a>
+    </div>
   </div>
 }

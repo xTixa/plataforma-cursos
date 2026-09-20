@@ -1,0 +1,44 @@
+h1 {
+  margin-bottom: 1rem;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 1.5rem;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.empty-state {
+  opacity: 0.7;
+  padding: 2rem 0;
+}
+
+.students-table {
+  width: 100%;
+}
+
+.progress-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 160px;
+
+  span {
+    font-size: 0.8rem;
+    min-width: 2.5rem;
+  }
+
+  mat-progress-bar {
+    flex: 1;
+  }
+}
+
+.muted {
+  opacity: 0.5;
+}

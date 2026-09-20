@@ -52,6 +52,18 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'admin/courses',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/admin/admin-courses/admin-courses').then((m) => m.AdminCourses),
+      },
+      {
+        path: 'admin/students',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./features/admin/admin-students/admin-students').then((m) => m.AdminStudents),
+      },
+      {
         path: 'admin/courses/new',
         canActivate: [adminGuard],
         loadComponent: () =>

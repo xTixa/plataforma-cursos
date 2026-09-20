@@ -1,0 +1,58 @@
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filters-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 320px;
+}
+
+.category-field {
+  width: 100%;
+  max-width: 240px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.empty-state {
+  opacity: 0.7;
+  padding: 2rem 0;
+}
+
+.courses-table {
+  width: 100%;
+}
+
+.warning-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #b26a00;
+  font-size: 0.875rem;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.actions-cell {
+  white-space: nowrap;
+}

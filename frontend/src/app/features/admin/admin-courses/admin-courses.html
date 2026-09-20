@@ -1,0 +1,91 @@
+<div class="admin-courses-page">
+  <div class="header-row">
+    <h1>Gerir Cursos</h1>
+    <a mat-raised-button color="primary" routerLink="/admin/courses/new">
+      <mat-icon>add</mat-icon>
+      Novo Curso
+    </a>
+  </div>
+
+  <div class="filters-row">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Pesquisar por título</mat-label>
+      <input matInput [formControl]="search" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="category-field">
+      <mat-label>Categoria</mat-label>
+      <mat-select [formControl]="categoryFilter">
+        <mat-option [value]="null">Todas as categorias</mat-option>
+        @for (cat of categories(); track cat) {
+          <mat-option [value]="cat">{{ cat }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">
+      <mat-spinner diameter="40" />
+    </div>
+  } @else if (courses().length === 0) {
+    <p class="empty-state">Nenhum curso encontrado.</p>
+  } @else {
+    <table mat-table [dataSource]="courses()" class="courses-table">
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>Título</th>
+        <td mat-cell *matCellDef="let course">
+          <a [routerLink]="['/courses', course._id]">{{ course.title }}</a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef>Categoria</th>
+        <td mat-cell *matCellDef="let course">{{ course.category }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="modules">
+        <th mat-header-cell *matHeaderCellDef>Conteúdo</th>
+        <td mat-cell *matCellDef="let course">
+          @if (course.modulesCount === 0) {
+            <span class="warning-chip">
+              <mat-icon inline>warning</mat-icon>
+              Sem módulos
+            </span>
+          } @else {
+            {{ course.modulesCount }} módulo(s), {{ course.lessonsCount }} aula(s)
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="enrollments">
+        <th mat-header-cell *matHeaderCellDef>Inscrições</th>
+        <td mat-cell *matCellDef="let course">{{ course.enrollments }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef>Criado em</th>
+        <td mat-cell *matCellDef="let course">{{ course.createdAt | date: 'dd/MM/yyyy' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Ações</th>
+        <td mat-cell *matCellDef="let course" class="actions-cell">
+          <a mat-icon-button [routerLink]="['/admin/courses', course._id, 'manage']" aria-label="Gerir conteúdo">
+            <mat-icon>settings</mat-icon>
+          </a>
+          <a mat-icon-button [routerLink]="['/admin/courses', course._id, 'edit']" aria-label="Editar curso">
+            <mat-icon>edit</mat-icon>
+          </a>
+          <button mat-icon-button color="warn" (click)="deleteCourse(course)" aria-label="Eliminar curso">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  }
+</div>

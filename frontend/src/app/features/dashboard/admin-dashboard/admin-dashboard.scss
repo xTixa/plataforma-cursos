@@ -33,12 +33,30 @@
     font-weight: 600;
   }
 
+  .value--small {
+    font-size: 1.1rem;
+  }
+
   .label {
     opacity: 0.7;
     font-size: 0.875rem;
   }
 }
 
-.manage-link {
-  display: inline-flex;
+.stat-card--warning {
+  border: 1px solid #b26a00;
+
+  mat-icon {
+    color: #b26a00;
+  }
+}
+
+.stat-card--wide {
+  grid-column: span 2;
+}
+
+.quick-links {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
